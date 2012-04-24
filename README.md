@@ -25,4 +25,4 @@ console.log( x ); // result: 1
 
 ### Support ###
 
-If you want to support **Tau.js**, leave a comment on our support issue #1 or contribute another example.
+If you want to support **Tau.js**, leave a comment on the [support issue](https://github.com/egraether/Tau.js/issues/1) or contribute another example.

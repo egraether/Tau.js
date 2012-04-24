@@ -16,7 +16,8 @@
 			input { text-align: right; }
 
 			#info { float: left; width: 400px; margin-right: 20px; }
-			#controls { margin-top: 24pt; padding-top: 16pt; border-top: 2px solid #666; }
+			#controls { margin-top: 24px; padding-top: 16pt; border-top: 2px solid #666; }
+			.unit { margin-right: 30px; }
 
 			#tauWrapper { float: left; width: 500px; position: relative; }
 			#tauCanvas { position: absolute; background-color: '#FFF'; }
@@ -32,23 +33,32 @@
 
 		<div id="info">
 
-			<h1><a href="https://github.com/egraether/tau.js">Tau.js</a></h1>
+			<h1> <a href="https://github.com/egraether/tau.js">Tau.js</a> </h1>
 
 			<p>
-				A JavaScript library that provides <b>&tau;</b>, <br /> a simpler alternative to <b>&pi;</b>.
+				A JavaScript library that provides <b>&tau;</b>, <br /> 
+				a simpler alternative to <b>&pi;</b>.
 			</p>
 
 			<p>
-				Learn more about how <b>&tau;</b> reduces complexity at
+				Learn more about why <b>&tau;</b> reduces complexity at
 				<a href="http://tauday.com/tau-manifesto">The Tau Manifesto</a>.
 			</p>
 
-			<p>
-				Download source at <a href="https://github.com/egraether/tau.js">github</a>. 
-			</p>
+			<p> Download source at <a href="https://github.com/egraether/tau.js">github</a>. </p>
 
-			<p id="controls"> Enter your desired angle:
-				<input id="tauAngle" type="text" placeholder="&tau;" size="1" onKeyPress="window.enter(this,event)" />
+			<p id="controls"> Enter your desired angle: </p>
+
+			<p>
+				<input id="degreeAngle" type="text" size="1" onKeyPress="window.enter(this,event)" />
+				<span class="unit">&deg;</span>
+
+				<input id="piAngle" type="text" size="1" onKeyPress="window.enter(this,event)" />
+				<span class="unit">&pi;</span>
+
+				<input id="tauAngle" type="text" size="1" onKeyPress="window.enter(this,event)" />
+				<span class="unit">&tau;</span>
+
 				<button onclick="window.evaluate();"> go </button>
 			</p>
 
@@ -69,12 +79,13 @@
 
 			var canvas = document.getElementById( 'tauCanvas' ),
 				display = document.getElementById( 'tauDisplay' ),
-				input = document.getElementById( 'tauAngle' ),
+				degreeInput = document.getElementById( 'degreeAngle' ),
+				piInput = document.getElementById( 'piAngle' ),
+				tauInput = document.getElementById( 'tauAngle' ),
 				ctx = canvas.getContext( '2d' ),
-				size = 500,
-				radius = 235,
-				current = 0,
-				aim = 0.28;
+				size = 500, radius = 235,
+				current = 0, aim,
+				degreeValue, piValue, tauValue;
 
 			canvas.width = canvas.height = size;
 			ctx.lineWidth = 6;
@@ -178,13 +189,33 @@
 
 			};
 
+			function aimAt( value ) {
+
+				aim = value;
+
+				degreeInput.value = degreeValue = Math.floor( value * 360 );
+				piInput.value = piValue = ( value * 2 ).toFixed( 2 );
+				tauInput.value = tauValue = value.toFixed( 2 );
+
+			};
+
 			function evaluate() {
 
-				var value = parseFloat( input.value );
+				var newDegreeValue = parseFloat( degreeInput.value ),
+					newPiValue = parseFloat( piInput.value ),
+					newTauValue = parseFloat( tauInput.value );
 
-				if ( value !== NaN ) {
+				if ( newDegreeValue !== NaN && degreeValue != newDegreeValue ) {
 
-					aim = value;
+					aimAt( newDegreeValue / 360 );
+
+				} else if ( newPiValue !== NaN && piValue != newPiValue ) {
+
+					aimAt( newPiValue / 2 );
+
+				} else if ( newTauValue !== NaN && tauValue != newTauValue ) {
+
+					aimAt( newTauValue );
 
 				}
 
@@ -200,6 +231,7 @@
 
 			}
 
+			aimAt( Math.random() * 0.5 + 0.1 );
 			run();
 
 		</script>
