@@ -1,0 +1,208 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+	<head>
+		<title>Tau.js</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<style>
+
+			* { font-family: 'Times New Roman', serif; font-size: 16pt; color: #666; }
+			body { padding: 20px 50px; }
+
+			h1 a { font-size: 32pt; letter-spacing: -0.05em; }
+			a:hover { color: #888; }
+
+			input { text-align: right; }
+
+			#info { float: left; width: 400px; margin-right: 20px; }
+			#controls { margin-top: 24pt; padding-top: 16pt; border-top: 2px solid #666; }
+
+			#tauWrapper { float: left; width: 500px; position: relative; }
+			#tauCanvas { position: absolute; background-color: '#FFF'; }
+			#tauDisplay { position: absolute; top: 130px; right: 135px; font-size: 96pt; }
+
+		</style>
+
+	</head>
+
+	<body>
+
+		<div>
+
+		<div id="info">
+
+			<h1><a href="https://github.com/egraether/tau.js">Tau.js</a></h1>
+
+			<p>
+				A JavaScript library that provides <b>&tau;</b>, <br /> a simpler alternative to <b>&pi;</b>.
+			</p>
+
+			<p>
+				Learn more about how <b>&tau;</b> reduces complexity at
+				<a href="http://tauday.com/tau-manifesto">The Tau Manifesto</a>.
+			</p>
+
+			<p>
+				Download source at <a href="https://github.com/egraether/tau.js">github</a>. 
+			</p>
+
+			<p id="controls"> Enter your desired angle:
+				<input id="tauAngle" type="text" placeholder="&tau;" size="1" onKeyPress="window.enter(this,event)" />
+				<button onclick="window.evaluate();"> go </button>
+			</p>
+
+		</div>
+
+		<div id="tauWrapper">
+			<canvas id="tauCanvas" ></canvas>
+			<p id="tauDisplay"></p>
+		</div>
+
+		</div>
+
+		<script src="../Tau.js"></script>
+
+		<script src="js/RequestAnimationFrame.js"></script>
+
+		<script>
+
+			var canvas = document.getElementById( 'tauCanvas' ),
+				display = document.getElementById( 'tauDisplay' ),
+				input = document.getElementById( 'tauAngle' ),
+				ctx = canvas.getContext( '2d' ),
+				size = 500,
+				radius = 235,
+				current = 0,
+				aim = 0.28;
+
+			canvas.width = canvas.height = size;
+			ctx.lineWidth = 6;
+
+			ctx.scale( 1, -1 );
+			ctx.translate( size / 2, -size / 2 );
+
+			function run() {
+
+				var diff = current - aim, text;
+
+				if ( aim !== current ) {
+
+					if ( Math.abs( diff ) < 0.001 ) {
+
+						current = aim;
+
+					} else {
+
+						current -= diff * 0.1;
+
+					}
+
+					draw( current );
+
+					if ( current < 0 ) {
+
+						text = '-' + ( current - Math.ceil( current ) ).toFixed( 3 ).toString().substr( 2, 3 );
+
+					} else {
+
+						text = ( current - Math.floor( current ) ).toFixed( 3 ).toString().substr( 1, 3 );
+
+					}
+
+					display.innerHTML = text + '&tau;';
+
+				}
+
+				requestAnimationFrame( run );
+
+			};
+
+			function drawArrow() {
+
+				ctx.beginPath();
+
+				ctx.moveTo( -5, 0 );
+				ctx.lineTo( -10, -12 );
+				ctx.lineTo( 15, 0 );
+				ctx.lineTo( -10, 12 );
+
+				ctx.closePath();
+
+				ctx.fill();
+
+			};
+
+			function draw( value ) {
+
+				ctx.clearRect( -size / 2, -size / 2, size, size );
+
+				// circle segment
+				ctx.beginPath();
+				ctx.arc( 0, 0, radius - 20, 0, TAU * value, value < 0 );
+				ctx.lineTo( 0, 0 );
+				ctx.closePath();
+
+				ctx.fillStyle = 'hsl(' + Math.floor( 360 * value ) + ', 75%, 90%)';
+				ctx.fill();
+
+				// circle
+				ctx.beginPath();
+				ctx.arc( 0, 0, radius - 20, 0, TAU, true );
+
+				ctx.strokeStyle = '#AFAFAF';
+				ctx.stroke();
+
+				// arrow lines
+				ctx.beginPath();
+				ctx.moveTo( radius, 0 );
+				ctx.lineTo( 0, 0 );
+				ctx.lineTo( Math.cos( TAU * value ) * radius, Math.sin( TAU * value ) * radius );
+
+				ctx.strokeStyle = ctx.fillStyle = 'hsl(' + Math.floor( 360 * value ) + ', 75%, 50%)';
+				ctx.stroke();
+
+				// arrows
+				ctx.save();
+				ctx.translate( radius, 0 );
+				drawArrow();
+
+				ctx.restore();
+				ctx.save();
+
+				ctx.rotate( TAU * value );
+				ctx.translate( radius, 0 );
+				drawArrow();
+
+				ctx.restore();
+
+			};
+
+			function evaluate() {
+
+				var value = parseFloat( input.value );
+
+				if ( value !== NaN ) {
+
+					aim = value;
+
+				}
+
+			};
+
+			function enter( i, e ) {
+
+				if ( e && e.keyCode && e.keyCode === 13 ) {
+
+					evaluate();
+
+				}
+
+			}
+
+			run();
+
+		</script>
+	</body>
+
+</html>
