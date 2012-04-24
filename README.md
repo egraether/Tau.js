@@ -5,7 +5,7 @@ Tau.js
 
 **Tau.js** provides `TAU`, a simpler alternative to `Math.PI`.
 
-Read more about why `TAU` reduces complexity at [The Tau Manifesto](http://tauday.com/tau-manifesto) and have a look at our [example](http://egraether.com/Tau.js/).
+Read more about why `TAU` reduces complexity at [The Tau Manifesto](http://tauday.com/tau-manifesto) and have a look at the [example](http://egraether.com/Tau.js/).
 
 ### Usage: ###
 
