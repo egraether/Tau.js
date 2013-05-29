@@ -9,7 +9,7 @@ Read more about why `TAU` reduces complexity at [The Tau Manifesto](http://tauda
 
 ### Usage: ###
 
-## Global TAU ##
+#### Global TAU ####
 
 Download the [library](https://github.com/egraether/Tau.js/blob/master/Tau.js) and include it in your html.
 
@@ -25,7 +25,7 @@ var x = Math.cos( TAU );
 console.log( x ); // result: 1
 ```
 
-## AMD ##
+#### AMD ####
 
 __Tau.js__ can also be used via AMD.
 
